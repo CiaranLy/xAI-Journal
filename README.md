@@ -1,7 +1,7 @@
 # XAI Group Project
 
 
-**Topic:** To be decided
+**Topic:** XAI in Medical Imaging
 
 **Scope:** To be decided
 
