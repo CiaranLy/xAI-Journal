@@ -71,6 +71,16 @@ def to_tensor(images):
     return (x - IMAGENET_MEAN) / IMAGENET_STD
 
 
+def to_raw(x):
+    """Normalised tensor (N, 3, H, W) -> float image in [0, 1], (N, H, W, 3)."""
+    return np.clip((x * IMAGENET_STD + IMAGENET_MEAN).permute(0, 2, 3, 1).numpy(), 0, 1)
+
+
+def brain_mask(x):
+    """Pixels that are not black background."""
+    return to_raw(x).max(axis=-1) > 0.02
+
+
 def black_baseline(shape):
     """A normalised all-black image, the background value of these MRI slices."""
     return ((torch.zeros(shape) - IMAGENET_MEAN) / IMAGENET_STD).expand(shape).clone()

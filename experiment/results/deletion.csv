@@ -24,6 +24,11 @@ patch,ordering,fraction,mean_prob,mean_drop,frac_flipped
 1,Edge detector (no model),0.05,0.881,0.087,0.095
 1,Edge detector (no model),0.1,0.598,0.37,0.408
 1,Edge detector (no model),0.2,0.063,0.904,0.941
+1,Input intensity (no model),0.01,0.87,0.097,0.112
+1,Input intensity (no model),0.02,0.793,0.174,0.207
+1,Input intensity (no model),0.05,0.64,0.328,0.349
+1,Input intensity (no model),0.1,0.244,0.724,0.775
+1,Input intensity (no model),0.2,0.055,0.912,0.959
 1,Random brain region,0.01,0.142,0.825,0.893
 1,Random brain region,0.02,0.042,0.925,0.959
 1,Random brain region,0.05,0.004,0.964,1.0
@@ -54,6 +59,11 @@ patch,ordering,fraction,mean_prob,mean_drop,frac_flipped
 16,Edge detector (no model),0.05,0.944,0.023,0.012
 16,Edge detector (no model),0.1,0.858,0.11,0.124
 16,Edge detector (no model),0.2,0.517,0.451,0.497
+16,Input intensity (no model),0.01,0.831,0.136,0.154
+16,Input intensity (no model),0.02,0.804,0.164,0.201
+16,Input intensity (no model),0.05,0.671,0.297,0.331
+16,Input intensity (no model),0.1,0.428,0.539,0.586
+16,Input intensity (no model),0.2,0.274,0.694,0.746
 16,Random brain region,0.01,0.925,0.042,0.047
 16,Random brain region,0.02,0.905,0.063,0.077
 16,Random brain region,0.05,0.783,0.184,0.201

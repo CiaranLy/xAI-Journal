@@ -1,8 +1,8 @@
 """Localisation and deletion tests for the saliency maps.
 
 Localisation: do the maps put their mass on the annotated tumour? We score the
-trained model, the fully randomised model, and a Sobel edge map of the input
-that uses no model at all. If the randomised model or the edge map localise
+trained model, the fully randomised model, and two model-free maps (Sobel
+edges and raw input intensity). If the randomised model or a model-free map localise
 the tumour too, then overlap with the tumour cannot be evidence that a map is
 faithful to the trained model.
 
@@ -21,7 +21,7 @@ import torch
 import torch.nn.functional as F
 from skimage.filters import sobel
 
-from common import DEVICE, IMAGENET_MEAN, IMAGENET_STD, RESULTS_DIR, black_baseline, load_trained_model
+from common import DEVICE, RESULTS_DIR, black_baseline, brain_mask, load_trained_model, to_raw
 from explainers import METHODS, explain
 from sanity import STAGES, randomise, test_images
 
@@ -81,7 +81,7 @@ def random_scores(brain, patch, rng):
 
 def main():
     x, masks, _ = test_images()
-    x_raw = np.clip((x * IMAGENET_STD + IMAGENET_MEAN).permute(0, 2, 3, 1).numpy(), 0, 1)
+    x_raw = to_raw(x)
     trained = load_trained_model()
     randomised = copy.deepcopy(trained)
     torch.manual_seed(0)
@@ -92,7 +92,9 @@ def main():
     trained_maps = {m: explain(m, trained, x) for m in METHODS}
     edges = edge_maps(x_raw)
 
-    loc_rows = [{"method": "Edge detector (no model)", "model": "none", **localisation(edges, masks)}]
+    intensity = x_raw.sum(axis=-1)
+    loc_rows = [{"method": "Edge detector (no model)", "model": "none", **localisation(edges, masks)},
+                {"method": "Input intensity (no model)", "model": "none", **localisation(intensity, masks)}]
     for method in METHODS:
         loc_rows.append({"method": method, "model": "trained", **localisation(trained_maps[method], masks)})
         loc_rows.append({"method": method, "model": "fully randomised",
@@ -102,12 +104,13 @@ def main():
     print(loc.to_string(index=False))
 
     rng = np.random.default_rng(0)
-    brain = x_raw.max(axis=-1) > 0.02
+    brain = brain_mask(x)
     base = tumour_prob(trained, x)
     del_rows = []
     for patch in DELETE_PATCH_SIZES:
         orderings = {**trained_maps,
                      "Edge detector (no model)": edges,
+                     "Input intensity (no model)": intensity,
                      "Random brain region": random_scores(brain, patch, rng)}
         for name, scores in orderings.items():
             for frac in DELETE_FRACTIONS:
