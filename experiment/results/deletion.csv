@@ -1,0 +1,62 @@
+patch,ordering,fraction,mean_prob,mean_drop,frac_flipped
+1,Gradient,0.01,0.139,0.828,0.941
+1,Gradient,0.02,0.076,0.892,0.976
+1,Gradient,0.05,0.023,0.945,0.988
+1,Gradient,0.1,0.004,0.963,1.0
+1,Gradient,0.2,0.0,0.967,1.0
+1,Guided Backprop,0.01,0.125,0.843,0.929
+1,Guided Backprop,0.02,0.052,0.915,0.994
+1,Guided Backprop,0.05,0.008,0.96,1.0
+1,Guided Backprop,0.1,0.001,0.967,1.0
+1,Guided Backprop,0.2,0.0,0.967,1.0
+1,Integrated Gradients,0.01,0.112,0.856,0.964
+1,Integrated Gradients,0.02,0.035,0.933,1.0
+1,Integrated Gradients,0.05,0.002,0.966,1.0
+1,Integrated Gradients,0.1,0.0,0.967,1.0
+1,Integrated Gradients,0.2,0.0,0.967,1.0
+1,Grad-CAM,0.01,0.592,0.375,0.42
+1,Grad-CAM,0.02,0.548,0.419,0.479
+1,Grad-CAM,0.05,0.423,0.545,0.621
+1,Grad-CAM,0.1,0.206,0.761,0.864
+1,Grad-CAM,0.2,0.062,0.905,0.994
+1,Edge detector (no model),0.01,0.919,0.048,0.053
+1,Edge detector (no model),0.02,0.908,0.06,0.065
+1,Edge detector (no model),0.05,0.881,0.087,0.095
+1,Edge detector (no model),0.1,0.598,0.37,0.408
+1,Edge detector (no model),0.2,0.063,0.904,0.941
+1,Random brain region,0.01,0.142,0.825,0.893
+1,Random brain region,0.02,0.042,0.925,0.959
+1,Random brain region,0.05,0.004,0.964,1.0
+1,Random brain region,0.1,0.001,0.966,1.0
+1,Random brain region,0.2,0.0,0.967,1.0
+16,Gradient,0.01,0.519,0.448,0.515
+16,Gradient,0.02,0.462,0.505,0.562
+16,Gradient,0.05,0.286,0.681,0.751
+16,Gradient,0.1,0.184,0.784,0.882
+16,Gradient,0.2,0.115,0.853,0.941
+16,Guided Backprop,0.01,0.563,0.405,0.462
+16,Guided Backprop,0.02,0.444,0.523,0.568
+16,Guided Backprop,0.05,0.264,0.703,0.781
+16,Guided Backprop,0.1,0.182,0.785,0.852
+16,Guided Backprop,0.2,0.079,0.889,0.953
+16,Integrated Gradients,0.01,0.479,0.488,0.556
+16,Integrated Gradients,0.02,0.434,0.533,0.604
+16,Integrated Gradients,0.05,0.252,0.716,0.799
+16,Integrated Gradients,0.1,0.136,0.831,0.923
+16,Integrated Gradients,0.2,0.056,0.911,1.0
+16,Grad-CAM,0.01,0.598,0.37,0.42
+16,Grad-CAM,0.02,0.548,0.419,0.479
+16,Grad-CAM,0.05,0.486,0.481,0.556
+16,Grad-CAM,0.1,0.266,0.701,0.763
+16,Grad-CAM,0.2,0.059,0.908,0.982
+16,Edge detector (no model),0.01,0.968,-0.0,0.012
+16,Edge detector (no model),0.02,0.961,0.006,0.012
+16,Edge detector (no model),0.05,0.944,0.023,0.012
+16,Edge detector (no model),0.1,0.858,0.11,0.124
+16,Edge detector (no model),0.2,0.517,0.451,0.497
+16,Random brain region,0.01,0.925,0.042,0.047
+16,Random brain region,0.02,0.905,0.063,0.077
+16,Random brain region,0.05,0.783,0.184,0.201
+16,Random brain region,0.1,0.527,0.44,0.491
+16,Random brain region,0.2,0.251,0.716,0.775
+0,Annotated tumour,0.028,0.159,0.809,0.888
