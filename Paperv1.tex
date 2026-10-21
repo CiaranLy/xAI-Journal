@@ -11,10 +11,6 @@ Are Evaluated in Medical Imaging}
 \maketitle
 
 \begin{abstract}
-\end{abstract}
-
-\section{Introduction}
-
 Saliency maps are the default explanation method in medical imaging AI 
 A plausible xai method is needed because x, and a faithful method is needed because y 
 These are both important because z 
@@ -25,7 +21,26 @@ We have put together that has been drawn from published evaluation frameworks- x
 And we find x 
 We then run a sanity-check experiment 
 And we close with x
+\end{abstract}
 
+\section{Introduction}
+Heatmaps (Grad-CAM, SHAP, etc.) appear in most medical imaging AI 
+papers and are presented as reassurance that the model can be trusted. 
+
+*briefly explain the methods 
+
+Thesis:Saliency explanations in medical imaging are mostly checked for plausibility (does it look right, do users like it) and not for faithfulness (does it reflect the model's computation). Higher user ratings don't mean users trust the model for the right reasons.  
+
+Key idea: separate what a paper {claims} the heatmap shows 
+from what it actually tests.  
+
+A heatmap used as a decision aid 
+needs a user study with wrong AI cases. A heatmap used as evidence of 
+what the model relies on needs faithfulness tests. 
+
+Contributions (three): (1) a framework separating faithfulness, 
+plausibility and simulatability; (2) an audit of recent papers; 
+(3) a minimum reporting checklist.
 \section{Background}
 
 \section{Audit Framework}
