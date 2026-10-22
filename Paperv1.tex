@@ -6,6 +6,9 @@
 \usepackage{hyperref}
 \renewcommand{\cite}{\citep}
 
+\usepackage{graphicx}
+\usepackage{amsmath}
+
 \begin{document}
 
 \title{Plausible but Unverified: How Saliency Explanations\\
@@ -86,10 +89,120 @@ Under the randomisation test, Guided Backpropagation and Guided Grad-CAM maps ba
 \section{Audit Results}
 
 \section{Experiment}
+\label{sec:experiment}
+The audit asks what evidence papers report. This section shows what the missing tests reveal on a typical medical imaging setup. We train a standard classifier, explain it with four common saliency methods, and apply one plausibility test and two faithfulness tests to the same maps. Code and results are in the project repository.
+
+\subsection{Setup}
+\textbf{Data.} The LGG MRI Segmentation dataset~\cite{buda2019lgg} contains 3,929 axial brain MRI slices from 110 patients with lower-grade glioma, each with a manual tumour mask. The pre-contrast, FLAIR and post-contrast sequences are stacked as the three channels of a $256\times256$ image, and a slice is labelled \emph{tumour} if its mask contains any tumour pixel. Patients are split 77/16/17 into training, validation and test sets, so no patient appears in more than one set.
+
+\textbf{Model.} An ImageNet-pretrained ResNet-18~\cite{he2016resnet} with a two-class head is fine-tuned for 12 epochs (Adam, learning rate $10^{-4}$, class-weighted cross-entropy, flip and shift augmentation), keeping the epoch with the best validation AUC. On the 674 test slices it reaches accuracy 0.942, AUC 0.976, sensitivity 0.837 and specificity 0.987.
+
+\textbf{Explanations.} We compare Gradient~\cite{simonyan2014saliency}, Guided Backpropagation~\cite{springenberg2015guided}, Integrated Gradients (IG; 32 steps, black baseline)~\cite{sundararajan2017ig} and Grad-CAM on the last convolutional block~\cite{selvaraju2017gradcam}. All four explain the tumour logit on the 169 test tumour slices the model classifies correctly.
+
+\subsection{Randomisation Test}
+Following \citet{adebayo2018sanity}, we re-initialise the network one block at a time, from the output layer down to the first convolution, with three random seeds. After each step we compare the new maps with the trained model's maps using Spearman rank correlation of absolute saliency over brain pixels. A faithful method should lose its similarity as the learned weights are destroyed. Table~\ref{tab:randomisation} and Fig.~\ref{fig:randomisation} give the results.
+
+\begin{table}[t]
+\centering
+\caption{Spearman correlation (brain pixels) between saliency maps of the trained model and of models randomised down to each layer. Mean over 169 slices and 3 seeds.}
+\label{tab:randomisation}
+\begin{tabular}{lcccc}
+\hline
+Randomised down to & Gradient & Guided BP & IG & Grad-CAM \\
+\hline
+Output layer & 0.48 & \textbf{0.99} & 0.75 & 0.29 \\
+Block 4 & 0.16 & 0.76 & 0.61 & 0.12 \\
+Block 2 & 0.09 & 0.39 & 0.56 & $-0.01$ \\
+Whole network & 0.01 & 0.12 & \textbf{0.54} & $-0.13$ \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{experiment/results/figures/randomisation_curves.pdf}
+\caption{Cascading randomisation. Similarity between the trained model's maps and those of progressively randomised models, as Spearman correlation over brain pixels (left) and SSIM (right). Bands show one standard deviation.}
+\label{fig:randomisation}
+\end{figure}
+
+Gradient and Grad-CAM pass: their similarity drops sharply once the output layer is randomised and is near zero for the fully random network. Guided Backpropagation fails in the way \citet{adebayo2018sanity} reported, staying almost unchanged (0.99) when the output layer is randomised, so its map does not depend on the class the model learned. IG fails differently, keeping a correlation of 0.54 with a \emph{completely random} network. Its maps correlate with raw input intensity at 0.66 for the trained model and 0.67 for the random model, so a large share of each IG map reflects the image rather than the model.
+
+The choice of similarity measure also matters. Over the whole image, IG's similarity with the fully random network is 0.82 rather than 0.54, because with a black baseline IG is exactly zero on the black background whatever the weights. A comparison that includes regions fixed by the method's construction makes a method look less model-dependent than it is.
+
+\subsection{Localisation}
+We measure plausibility as it is usually reported, by agreement with the annotated tumour: the pointing game~\cite{zhang2018pointing} (whether the map's peak falls inside the mask) and the share of the map's mass inside the mask. The tumour covers on average 2.8\% of a slice, so a uniform map would place 2.8\% of its mass there. As controls we score the fully randomised model and two maps that use no model at all: Sobel edges of the FLAIR channel and raw input intensity.
+
+\begin{table}[t]
+\centering
+\caption{Localisation on the annotated tumour (mean of 169 slices). The tumour covers 2.8\% of a slice on average.}
+\label{tab:localisation}
+\begin{tabular}{lcc}
+\hline
+Map & Pointing game & Mass in tumour \\
+\hline
+IG, trained & \textbf{0.91} & \textbf{0.24} \\
+Gradient, trained & 0.73 & 0.13 \\
+Grad-CAM, trained & 0.56 & 0.13 \\
+Guided BP, trained & 0.47 & 0.23 \\
+Any method, fully randomised & $\leq 0.01$ & 0.02--0.07 \\
+Edge detector (no model) & 0.01 & 0.03 \\
+Input intensity (no model) & 0.00 & 0.07 \\
+\hline
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:localisation} shows that IG localises the tumour best, with its peak inside the mask on 91\% of slices. Yet IG is also the method that keeps the most similarity with a fully random network in Table~\ref{tab:randomisation}. A paper that reported only localisation would pick IG as the most trustworthy method. Agreeing with the annotation and depending on the model are separate properties, and ranking methods by one does not predict their ranking by the other, consistent with \citet{ma2026ranking}, who found that method rankings change with the evaluation metric.
+
+\subsection{Deletion Test}
+Following \citet{petsiuk2018rise}, we black out the top 1--20\% of the image ranked by saliency and measure the drop in the model's tumour probability, whose baseline is 0.967. We rank either single pixels or $16\times16$ patches (by mean saliency). As controls we delete the same amount of randomly chosen brain pixels or patches, and the annotated tumour itself.
+
+\begin{table}[t]
+\centering
+\caption{Mean drop in tumour probability (baseline 0.967) after deleting 1\% of the image, ranked by single pixels or by $16\times16$ patches.}
+\label{tab:deletion}
+\begin{tabular}{lcc}
+\hline
+Deleted & Pixels & Patches \\
+\hline
+Gradient, top 1\% & 0.83 & 0.45 \\
+Guided BP, top 1\% & 0.84 & 0.41 \\
+IG, top 1\% & 0.86 & 0.49 \\
+Grad-CAM, top 1\% & 0.38 & 0.37 \\
+Random brain region, 1\% & \textbf{0.83} & \textbf{0.04} \\
+\hline
+Annotated tumour (2.8\%) & \multicolumn{2}{c}{0.81} \\
+\hline
+\end{tabular}
+\end{table}
+
+At pixel level the test cannot tell a saliency method from chance (Table~\ref{tab:deletion}): deleting 1\% of random brain pixels lowers the tumour probability by 0.83, as much as deleting the pixels Gradient, Guided Backpropagation or IG rank highest, and slightly more than deleting the whole tumour. Scattered black pixels push the image out of the distribution the model was trained on and break its prediction whatever selects them~\cite{hooker2019roar}. Grad-CAM behaves like the patch version even at pixel level, likely because its coarse, upsampled maps rank contiguous regions highest. Deleting contiguous patches removes this effect: random patches lower the probability by only 0.04, while every method's top patches lower it by 0.37--0.49. Under this version of the test, all four methods highlight regions the model relies on.
+
+\subsection{Discussion}
+Three points follow for how saliency maps should be evaluated.
+
+\textbf{Plausibility does not imply faithfulness.} The best-localising method failed the randomisation test, and Guided Backpropagation localised reasonably while ignoring the learned output layer. Localisation alone, the evidence most papers report, would have ranked the methods wrongly.
+
+\textbf{No single test is enough.} Guided Backpropagation and IG passed the patch deletion test while failing randomisation, and only randomisation exposed IG's dependence on input intensity. Each test answers a different question.
+
+\textbf{How a test is run decides its outcome.} Including the image background inflated IG's similarity from 0.54 to 0.82, and pixel-level deletion made every method indistinguishable from random. A reported faithfulness score therefore means little without its similarity measure, region and replacement scheme.
+
+Fig.~\ref{fig:examples} shows these effects on one slice.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{experiment/results/figures/example_maps.pdf}
+\caption{Saliency maps for one test slice (tumour outlined on FLAIR) from the trained model and from models randomised down to each layer.}
+\label{fig:examples}
+\end{figure}
+
+\textbf{Limitations.} The experiment uses one dataset, one architecture and one training run, and the 169 explained slices come from 17 patients. Deletion uses black replacement; blurring, inpainting or retraining~\cite{hooker2019roar} could change the size of the effects. Batch-norm statistics are reset during randomisation, so randomised networks differ in activation scale as well as weights, and IG is evaluated with a single black baseline, which partly explains its dependence on input brightness.
 
 \section{Recommendations}
 
 \section{Conclusion and Limitations}
+
+\section*{Acknowledgment}
+Claude (Anthropic) was used to assist in implementing and running the experiment in Section~\ref{sec:experiment}. The experiment was designed and conducted by the authors, who checked all reported results.
 
 \bibliographystyle{harvard-ul}
 \bibliography{refs}
