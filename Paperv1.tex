@@ -70,8 +70,23 @@ References used (or that will be used) here
 \item J. Hatherley et al., ``In defense of post hoc explanations in medical AI.''
 \item J. Hou et al., ``Self-eXplainable AI for medical image analysis: a survey and new outlooks,'' arXiv:2410.02331.
 \end{itemize}
-\section{Background}
 
+\section{Background}
+\label{sec:background}
+ 
+\subsection{Saliency Methods}
+Saliency methods score each pixel by its contribution to a prediction. Grad-CAM~\cite{selvaraju2017gradcam} weights each feature map $A^k$ of the last convolutional layer by the averaged gradient of the class score $y^c$:
+\begin{equation}
+\alpha_k^c = \frac{1}{Z}\sum_i\sum_j \frac{\partial y^c}{\partial A^k_{ij}}, \qquad
+L^c = \mathrm{ReLU}\Big(\sum_k \alpha_k^c A^k\Big),
+\end{equation}
+where $Z$ is the number of spatial positions $(i,j)$, so its maps are coarse and can blur small lesions. IG~\cite{sundararajan2017ig} integrates gradients from a baseline image to the input, LRP~\cite{bach2015lrp} propagates the output score backwards while conserving relevance, and SHAP~\cite{lundberg2017shap} assigns Shapley values, usually computed over superpixels for images. All four are \emph{post-hoc}: they explain an already-trained model, whereas self-explainable models build interpretability into the architecture~\cite{hou2024sxai}, which Rudin~\cite{rudin2019stop} argues high-stakes domains should prefer.
+ 
+\subsection{Faithfulness, Plausibility and Simulatability}
+An explanation is \emph{faithful} if it reflects the reasoning the model used, and \emph{plausible} if it convinces a human~\cite{jacovi2020faithfulness}; in medical imaging, plausibility is usually judged by overlap with lesion masks. A map can outline a tumour while the model relies on something else, so faithfulness must be tested against the model. The \emph{randomisation test}~\cite{adebayo2018sanity} randomises the model's weights: a map that barely changes cannot reflect what the model learned. The \emph{deletion test}~\cite{petsiuk2018rise} removes the most salient pixels first: for a faithful map, the class score falls faster than when random pixels are removed. \emph{Simulatability}, whether a person can predict the model's output from the explanation, is a third property, which CX-ToM~\cite{akula2022cxtom} measures as users' ability to predict the model. Hou et al.~\cite{hou2024sxai} list faithfulness and plausibility as separate requirements for medical explanations.
+ 
+\subsection{Known Failures}
+Under the randomisation test, Guided Backpropagation and Guided Grad-CAM maps barely changed, while Grad-CAM passed~\cite{adebayo2018sanity}. On chest radiographs, all eight methods tested by Arun et al.~\cite{arun2021trustworthiness} failed at least one trustworthiness criterion, and all seven tested by Saporta et al.~\cite{saporta2022benchmarking} localised pathologies worse than radiologists. DeGrave et al.~\cite{degrave2021shortcuts} showed why this matters clinically: COVID-19 classifiers relied on shortcuts such as text markers rather than lung pathology.
 \section{Audit Framework}
 
 \section{Audit Results}
