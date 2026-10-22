@@ -24,23 +24,50 @@ And we close with x
 \end{abstract}
 
 \section{Introduction}
-Heatmaps (Grad-CAM, SHAP, etc.) appear in most medical imaging AI 
-papers and are presented as reassurance that the model can be trusted. 
-
-*briefly explain the methods 
-
-Thesis:Saliency explanations in medical imaging are mostly checked for plausibility (does it look right, do users like it) and not for faithfulness (does it reflect the model's computation). Higher user ratings don't mean users trust the model for the right reasons.  
-
-Key idea: separate what a paper {claims} the heatmap shows 
-from what it actually tests.  
-
-A heatmap used as a decision aid 
-needs a user study with wrong AI cases. A heatmap used as evidence of 
-what the model relies on needs faithfulness tests. 
-
+Rough draft- When written properly I will cut to 250-300 words (this should be0.5 column)
+ 
+\textbf{Point:1} Saliency maps are the dominant form of explanation in medical imaging AI
+ 
+Evidence: Survey of 221 medical XAI papers: most use visual methods highlighting influential regions. In practice: Grad-CAM, LRP, SHAP, input gradients. 88\% of 33 surveyed physicians agreed it matters that AI explains its diagnosis.
+ 
+Link - But what is the heatmap actually being claimed to show?
+ 
+\textbf{Point2} - A heatmap supports two claims that are rarely separated: faithfulness (reflects what the model computes) and plausibility (matches where a clinician would look).
+ 
+Evidence - Ma et al.: one method at mean rank 4.7 of 13 for plausibility but 8.4 for faithfulness, rank 1 best; (\textbf{how do I explain this unintuitive ranking but still cite it right?}) they conclude plausibility does not guarantee faithfulness. Our experiment reproduces this.
+ 
+Evidence: Wagner: shown one correct and one incorrect AI diagnosis per format, 50\% of physicians trusted the false ones, heatmaps producing more false diagnoses than any other format.
+ 
+Explain - Only faithfulness proves `the model learned clinically relevant features.'' Plausibility is a statement about human expectation, which is satisfiable by a model that is right for the wrong reasons.
+ 
+Link - So a paper claiming faithfulness owes the reader a faithfulness test.
+ 
+\textbf{Point 3}- Those tests are seldom run.
+ 
+Evidence --1.Panboonyuen defines localisation accuracy, perturbation faithfulness and explanation consistency as equations, reports no value for any, and concludes from ten example images. 2.McGonagle treats agreement among Grad-CAM, LRP and SHAP as corroboration, though methods can agree and all be insensitive to the model.
+ 
+Explanation -This is a pattern about what gets reported, not about what authors believe. We are not claiming post-hoc explanation is worthless, or that self-explainable models are the only route - the objection is to gathering evidence for one claim and asserting the other.
+ 
+Link -if the problem is reporting, the solution is a reporting standard!
+ 
+Contributions
+ 
 Contributions (three): (1) a framework separating faithfulness, 
 plausibility and simulatability; (2) an audit of recent papers; 
 (3) a minimum reporting checklist.
+ 
+References used (or that will be used) here
+ 
+\begin{itemize}
+\item J. Wagner and T. Schlippe, ``A user-centric analysis of explainability in AI-based medical image diagnosis,'' arXiv:2605.02903, 2026.
+\item R. R. Selvaraju, M. Cogswell, A. Das, R. Vedantam, D. Parikh, and D. Batra, ``Grad-CAM: visual explanations from deep networks via gradient-based localization,'' in Proc. IEEE ICCV, 2017, pp. 618--626.
+\item B. Ma et al., ``Ranking XAI methods for head and neck cancer outcome prediction.''
+\item T. Panboonyuen, ``Seeing isn't always believing: analysis of Grad-CAM faithfulness and localization reliability in lung cancer CT classification,'' in Proc. KST2026, 2026.
+\item P. McGonagle et al., ``Explainable AI: a combined XAI framework for explaining brain tumour detection models.''
+\item J. Adebayo, J. Gilmer, M. Muelly, I. Goodfellow, M. Hardt, and B. Kim, ``Sanity checks for saliency maps,'' in Adv. NeurIPS, vol. 31, 2018.
+\item J. Hatherley et al., ``In defense of post hoc explanations in medical AI.''
+\item J. Hou et al., ``Self-eXplainable AI for medical image analysis: a survey and new outlooks,'' arXiv:2410.02331.
+\end{itemize}
 \section{Background}
 
 \section{Audit Framework}
