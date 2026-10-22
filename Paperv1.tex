@@ -1,5 +1,11 @@
 \documentclass[conference]{IEEEtran}
 
+% Harvard (UL Cite it Right) referencing: see harvard-ul.bst and refs.bib
+\usepackage[round]{natbib}
+\setcitestyle{aysep={}}
+\usepackage{hyperref}
+\renewcommand{\cite}{\citep}
+
 \begin{document}
 
 \title{Plausible but Unverified: How Saliency Explanations\\
@@ -28,7 +34,7 @@ Rough draft- main points- will shorten and lessen overlap/repetition between abs
 
 \textbf{Point1:} Saliency maps are the dominant form of explanation in medical imaging AI, yet the evidence on whether they help is contradictory.
  
-Evidence: A survey of 221 medical XAI papers found most Medical Imaging AI models use visual methods highlighting influential regions as the method to explain the model [1]. Adoption remains limited, with 63\% of surveyed physicians reporting no experience of AI-based diagnosis [1], and the literature splits, Hatherley defending post-hoc explanation [2] while Kaufman and Kirsh argue post hoc XAI methods dont match how human experts build and communicate a diagnostic case [3].
+Evidence: A survey of 221 medical XAI papers found most Medical Imaging AI models use visual methods highlighting influential regions as the method to explain the model~\cite{wagner2026usercentric}. Adoption remains limited, with 63\% of surveyed physicians reporting no experience of AI-based diagnosis~\cite{wagner2026usercentric}, and the literature splits, \citet{hatherley2026defence} defending post-hoc explanation while \citet{kaufman2023radiology} argue post hoc XAI methods dont match how human experts build and communicate a diagnostic case.
  
 Explanation: The field converged on heatmaps for practical reasons (cheap, post-hoc, model-agnostic), not because their value was settled.
  
@@ -36,7 +42,7 @@ Link: Why that argument has not resolved is the more useful question.
  
 \textbf{Point2.} The literature disagrees because explanation quality is model- and task-specific. No ranking of methods can therefore fix the field, but the evidence each paper reports can.
  
-Evidence: Panboonyuen finds Grad-CAM's fidelity degrades for Vision Transformers while holding for CNNs, and calls for model-aware interpretability [4]. Ma finds rankings vary by metric and dataset, with methods strong on one dimension weak on another [5]. Hou's survey separates evaluation into dimensions serving different purposes [6].
+Evidence: \citet{panboonyuen2026seeing} finds Grad-CAM's fidelity degrades for Vision Transformers while holding for CNNs, and calls for model-aware interpretability. \citet{ma2026ranking} find rankings vary by metric and dataset, with methods strong on one dimension weak on another [5]. The survey by \citet{hou2024sxai} separates evaluation into dimensions serving different purposes.
  
 Explanation: ``Which method is best?'' has no answer that transfers. What transfers is evidence, letting each reader judge for their own model and task. That requires separating two claims: faithfulness, that the map reflects what the model computes, and plausibility, that it matches where a clinician would look.
  
@@ -44,9 +50,9 @@ Link: So the question is what evidence papers actually report.
  
 \textbf{Point3.} Papers claim faithfulness and show plausibility.
  
-Evidence: Panboonyuen defines localisation accuracy, perturbation faithfulness and explanation consistency as equations, reports no value for any, and then concludes from ten example images [4]. McGonagle treats agreement among Grad-CAM, LRP and SHAP as corroboration [7], though methods can agree and all be insensitive to the model [8]. Ma places one method at mean rank 4.7 of 13 for plausibility but 8.4 for faithfulness, where rank 1 is best [5]. (**CHANGE wording)
+Evidence: \citet{panboonyuen2026seeing} defines localisation accuracy, perturbation faithfulness and explanation consistency as equations, reports no value for any, and then concludes from ten example images. \citet{mcgonagle2026combined} treat agreement among Grad-CAM, LRP and SHAP as corroboration, though methods can agree and all be insensitive to the model~\cite{adebayo2018sanity}. \citet{ma2026ranking} place one method at mean rank 4.7 of 13 for plausibility but 8.4 for faithfulness, where rank 1 is best. (**CHANGE wording)
 In our experiment , **insert spporting claim (Sec. V).
-Shown one correct and one incorrect diagnosis per format, 50\% of physicians trusted the false ones, with heatmaps producing more false diagnoses than any other format [1].
+Shown one correct and one incorrect diagnosis per format, 50\% of physicians trusted the false ones, with heatmaps producing more false diagnoses than any other format~\cite{wagner2026usercentric}.
  
 Explanation: A heatmap can highlight the tumour even when the tumour is not what the model used to decide. Only the tests these papers leave out would show the difference.
  
@@ -58,18 +64,6 @@ Contributions (three): (1) a framework separating faithfulness,
 plausibility and simulatability;**is this one? (2) an audit of recent papers; 
 (3) a minimum reporting checklist.
  
-References used (or that will be used) here
- 
-\begin{itemize}
-\item J. Wagner and T. Schlippe, ``A user-centric analysis of explainability in AI-based medical image diagnosis,'' arXiv:2605.02903, 2026.
-\item R. R. Selvaraju, M. Cogswell, A. Das, R. Vedantam, D. Parikh, and D. Batra, ``Grad-CAM: visual explanations from deep networks via gradient-based localization,'' in Proc. IEEE ICCV, 2017, pp. 618--626.
-\item B. Ma et al., ``Ranking XAI methods for head and neck cancer outcome prediction.''
-\item T. Panboonyuen, ``Seeing isn't always believing: analysis of Grad-CAM faithfulness and localization reliability in lung cancer CT classification,'' in Proc. KST2026, 2026.
-\item P. McGonagle et al., ``Explainable AI: a combined XAI framework for explaining brain tumour detection models.''
-\item J. Adebayo, J. Gilmer, M. Muelly, I. Goodfellow, M. Hardt, and B. Kim, ``Sanity checks for saliency maps,'' in Adv. NeurIPS, vol. 31, 2018.
-\item J. Hatherley et al., ``In defense of post hoc explanations in medical AI.''
-\item J. Hou et al., ``Self-eXplainable AI for medical image analysis: a survey and new outlooks,'' arXiv:2410.02331.
-\end{itemize}
 
 \section{Background}
 \label{sec:background}
@@ -80,13 +74,13 @@ Saliency methods score each pixel by its contribution to a prediction. Grad-CAM~
 \alpha_k^c = \frac{1}{Z}\sum_i\sum_j \frac{\partial y^c}{\partial A^k_{ij}}, \qquad
 L^c = \mathrm{ReLU}\Big(\sum_k \alpha_k^c A^k\Big),
 \end{equation}
-where $Z$ is the number of spatial positions $(i,j)$, so its maps are coarse and can blur small lesions. IG~\cite{sundararajan2017ig} integrates gradients from a baseline image to the input, LRP~\cite{bach2015lrp} propagates the output score backwards while conserving relevance, and SHAP~\cite{lundberg2017shap} assigns Shapley values, usually computed over superpixels for images. All four are \emph{post-hoc}: they explain an already-trained model, whereas self-explainable models build interpretability into the architecture~\cite{hou2024sxai}, which Rudin~\cite{rudin2019stop} argues high-stakes domains should prefer.
+where $Z$ is the number of spatial positions $(i,j)$, so its maps are coarse and can blur small lesions. IG~\cite{sundararajan2017ig} integrates gradients from a baseline image to the input, LRP~\cite{bach2015lrp} propagates the output score backwards while conserving relevance, and SHAP~\cite{lundberg2017shap} assigns Shapley values, usually computed over superpixels for images. All four are \emph{post-hoc}: they explain an already-trained model, whereas self-explainable models build interpretability into the architecture~\cite{hou2024sxai}, which \citet{rudin2019stop} argues high-stakes domains should prefer.
  
 \subsection{Faithfulness, Plausibility and Simulatability}
-An explanation is \emph{faithful} if it reflects the reasoning the model used, and \emph{plausible} if it convinces a human~\cite{jacovi2020faithfulness}; in medical imaging, plausibility is usually judged by overlap with lesion masks. A map can outline a tumour while the model relies on something else, so faithfulness must be tested against the model. The \emph{randomisation test}~\cite{adebayo2018sanity} randomises the model's weights: a map that barely changes cannot reflect what the model learned. The \emph{deletion test}~\cite{petsiuk2018rise} removes the most salient pixels first: for a faithful map, the class score falls faster than when random pixels are removed. \emph{Simulatability}, whether a person can predict the model's output from the explanation, is a third property, which CX-ToM~\cite{akula2022cxtom} measures as users' ability to predict the model. Hou et al.~\cite{hou2024sxai} list faithfulness and plausibility as separate requirements for medical explanations.
+An explanation is \emph{faithful} if it reflects the reasoning the model used, and \emph{plausible} if it convinces a human~\cite{jacovi2020faithfulness}; in medical imaging, plausibility is usually judged by overlap with lesion masks. A map can outline a tumour while the model relies on something else, so faithfulness must be tested against the model. The \emph{randomisation test}~\cite{adebayo2018sanity} randomises the model's weights: a map that barely changes cannot reflect what the model learned. The \emph{deletion test}~\cite{petsiuk2018rise} removes the most salient pixels first: for a faithful map, the class score falls faster than when random pixels are removed. \emph{Simulatability}, whether a person can predict the model's output from the explanation, is a third property, which CX-ToM~\cite{akula2022cxtom} measures as users' ability to predict the model. \citet{hou2024sxai} list faithfulness and plausibility as separate requirements for medical explanations.
  
 \subsection{Known Failures}
-Under the randomisation test, Guided Backpropagation and Guided Grad-CAM maps barely changed, while Grad-CAM passed~\cite{adebayo2018sanity}. On chest radiographs, all eight methods tested by Arun et al.~\cite{arun2021trustworthiness} failed at least one trustworthiness criterion, and all seven tested by Saporta et al.~\cite{saporta2022benchmarking} localised pathologies worse than radiologists. DeGrave et al.~\cite{degrave2021shortcuts} showed why this matters clinically: COVID-19 classifiers relied on shortcuts such as text markers rather than lung pathology.
+Under the randomisation test, Guided Backpropagation and Guided Grad-CAM maps barely changed, while Grad-CAM passed~\cite{adebayo2018sanity}. On chest radiographs, all eight methods tested by \citet{arun2021trustworthiness} failed at least one trustworthiness criterion, and all seven tested by \citet{saporta2022benchmarking} localised pathologies worse than radiologists. \citet{degrave2021shortcuts} showed why this matters clinically: COVID-19 classifiers relied on shortcuts such as text markers rather than lung pathology.
 \section{Audit Framework}
 
 \section{Audit Results}
@@ -96,5 +90,8 @@ Under the randomisation test, Guided Backpropagation and Guided Grad-CAM maps ba
 \section{Recommendations}
 
 \section{Conclusion and Limitations}
+
+\bibliographystyle{harvard-ul}
+\bibliography{refs}
 
 \end{document}
