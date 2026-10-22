@@ -1,0 +1,11 @@
+method,model,pointing_game,mass_in_tumour,tumour_area_frac
+Edge detector (no model),none,0.012,0.03,0.028
+Input intensity (no model),none,0.0,0.07,0.028
+Gradient,trained,0.734,0.131,0.028
+Gradient,fully randomised,0.012,0.029,0.028
+Guided Backprop,trained,0.467,0.226,0.028
+Guided Backprop,fully randomised,0.0,0.027,0.028
+Integrated Gradients,trained,0.905,0.241,0.028
+Integrated Gradients,fully randomised,0.012,0.068,0.028
+Grad-CAM,trained,0.556,0.134,0.028
+Grad-CAM,fully randomised,0.0,0.02,0.028
