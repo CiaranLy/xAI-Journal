@@ -33,38 +33,36 @@ And we close with x
 \end{abstract}
 
 \section{Introduction}
-Rough draft- main points- will shorten and lessen overlap/repetition between abstract and intro.
+Saliency maps are the dominant explanation in medical imaging AI: most of 
+221 surveyed medical XAI papers explain a prediction by highlighting the 
+image regions that drove it~\cite{wagner2026usercentric}. Yet their value is 
+disputed: \citet{hatherley2026defence} defend post hoc explanation, while 
+\citet{kaufman2023radiology} argue it does not match how experts build a 
+diagnosis. The dispute is hard to settle in general because explanation 
+quality depends on the model and task: Grad-CAM's fidelity holds for CNNs 
+but drops for Vision Transformers~\cite{panboonyuen2026seeing}, and method 
+rankings change with metric and dataset~\cite{ma2026ranking}.
 
-Saliency maps are the dominant explanation in medical imaging AI, per a survey of 221 XAI papers~\cite{wagner2026usercentric}. Yet the evidence on whether they help 
+A method that works well for one model therefore cannot be assumed to work 
+for another, and must be checked on the model it explains. A paper that 
+presents a map as an explanation implies that the map reflects what its 
+model computes, a property called \emph{faithfulness}. This differs from 
+\emph{plausibility}, whether the map matches where a clinician would 
+look~\cite{jacovi2020faithfulness}, and the two must be tested separately 
+because a map can pass one and fail the other. In our experiment, the method 
+that located the tumour best depended least on the model 
+(Sec.~\ref{sec:experiment}).
 
-is contradictory. \citet{hatherley2026defence} defend post hoc explanation, while \citet{kaufman2023radiology} argue it does not match how experts build a diagnostic case.  
+Only one of the six recent papers we audit reports a working faithfulness 
+test. \citet{panboonyuen2026seeing} defines faithfulness metrics but reports 
+none and concludes from ten example images. The others present maps that 
+look right as evidence that their models reason correctly, without showing 
+that the maps reflect the models at all.
 
-The field converged on heatmaps for practical reasons (cheap, post-hoc, model-agnostic), not because their value was settled.  
- 
-\textbf{Point2.} The literature disagrees because explanation quality is model- and task-specific. No ranking of methods can therefore fix the field, but the evidence each paper reports can.
- 
-Evidence: \citet{panboonyuen2026seeing} finds Grad-CAM's fidelity degrades for Vision Transformers while holding for CNNs, and calls for model-aware interpretability. \citet{ma2026ranking} find rankings vary by metric and dataset, with methods strong on one dimension weak on another [5]. The survey by \citet{hou2024sxai} separates evaluation into dimensions serving different purposes.
- 
-Explanation: ``Which method is best?'' has no answer that transfers. What transfers is evidence, letting each reader judge for their own model and task. That requires separating two claims: faithfulness, that the map reflects what the model computes, and plausibility, that it matches where a clinician would look.
- 
-Link: So the question is what evidence papers actually report.
- 
-\textbf{Point3.} Papers claim faithfulness and show plausibility.
- 
-Evidence: \citet{panboonyuen2026seeing} defines localisation accuracy, perturbation faithfulness and explanation consistency as equations, reports no value for any, and then concludes from ten example images. \citet{mcgonagle2026combined} treat agreement among Grad-CAM, LRP and SHAP as corroboration, though methods can agree and all be insensitive to the model~\cite{adebayo2018sanity}. \citet{ma2026ranking} place one method at mean rank 4.7 of 13 for plausibility but 8.4 for faithfulness, where rank 1 is best. (**CHANGE wording)
-In our experiment , **insert spporting claim (Sec. V).
-Shown one correct and one incorrect diagnosis per format, 50\% of physicians trusted the false ones, with heatmaps producing more false diagnoses than any other format~\cite{wagner2026usercentric}.
- 
-Explanation: A heatmap can highlight the tumour even when the tumour is not what the model used to decide. Only the tests these papers leave out would show the difference.
- 
-Link: The remedy is not a better method but a reporting minimum.
- 
-Contributions
- 
-Contributions (three): (1) a framework separating faithfulness, 
-plausibility and simulatability;**is this one? (2) an audit of recent papers; 
-(3) a minimum reporting checklist.
- 
+To close this gap, we contribute (1) a framework separating faithfulness, 
+plausibility and simulatability; (2) an audit of six papers against it; 
+(3) an experiment showing what the missing tests reveal; and (4) a minimum 
+reporting checklist.
 
 \section{Background}
 \label{sec:background}
