@@ -151,7 +151,7 @@ Input intensity (no model) & 0.00 & 0.07 \\
 \end{tabular}
 \end{table}
 
-Table~\ref{tab:localisation} shows that IG localises the tumour best, with its peak inside the mask on 91\% of slices. Yet IG is also the method that keeps the most similarity with a fully random network in Table~\ref{tab:randomisation}. A paper that reported only localisation would pick IG as the most trustworthy method. Agreeing with the annotation and depending on the model are separate properties, and ranking methods by one does not predict their ranking by the other, as \citet{ma2026ranking} also found.
+Table~\ref{tab:localisation} shows that IG localises the tumour best, with its peak inside the mask on 91\% of slices. Yet IG is also the method that keeps the most similarity with a fully random network in Table~\ref{tab:randomisation}. A paper that reported only localisation would pick IG as the most trustworthy method. Agreeing with the annotation and depending on the model are separate properties, and ranking methods by one does not predict their ranking by the other, consistent with \citet{ma2026ranking}, who found that method rankings change with the evaluation metric.
 
 \subsection{Deletion Test}
 Following \citet{petsiuk2018rise}, we black out the top 1--20\% of the image ranked by saliency and measure the drop in the model's tumour probability, whose baseline is 0.967. We rank either single pixels or $16\times16$ patches (by mean saliency). As controls we delete the same amount of randomly chosen brain pixels or patches, and the annotated tumour itself.
@@ -175,7 +175,7 @@ Annotated tumour (2.8\%) & \multicolumn{2}{c}{0.81} \\
 \end{tabular}
 \end{table}
 
-At pixel level the test cannot tell a saliency method from chance (Table~\ref{tab:deletion}): deleting 1\% of random brain pixels lowers the tumour probability by 0.83, as much as deleting the pixels Gradient, Guided Backpropagation or IG rank highest, and slightly more than deleting the whole tumour. Scattered black pixels push the image out of the distribution the model was trained on and break its prediction whatever selects them~\cite{hooker2019roar}. Grad-CAM's top pixels form a few contiguous blobs, which is why it behaves like the patch version even at pixel level. Deleting contiguous patches removes this effect: random patches lower the probability by only 0.04, while every method's top patches lower it by 0.37--0.49. Under this version of the test, all four methods highlight regions the model relies on.
+At pixel level the test cannot tell a saliency method from chance (Table~\ref{tab:deletion}): deleting 1\% of random brain pixels lowers the tumour probability by 0.83, as much as deleting the pixels Gradient, Guided Backpropagation or IG rank highest, and slightly more than deleting the whole tumour. Scattered black pixels push the image out of the distribution the model was trained on and break its prediction whatever selects them~\cite{hooker2019roar}. Grad-CAM behaves like the patch version even at pixel level, likely because its coarse, upsampled maps rank contiguous regions highest. Deleting contiguous patches removes this effect: random patches lower the probability by only 0.04, while every method's top patches lower it by 0.37--0.49. Under this version of the test, all four methods highlight regions the model relies on.
 
 \subsection{Discussion}
 Three points follow for how saliency maps should be evaluated.
@@ -200,6 +200,9 @@ Fig.~\ref{fig:examples} shows these effects on one slice.
 \section{Recommendations}
 
 \section{Conclusion and Limitations}
+
+\section*{Acknowledgment}
+Claude (Anthropic) was used to assist in implementing and running the experiment in Section~\ref{sec:experiment}. The experiment was designed and conducted by the authors, who checked all reported results.
 
 \bibliographystyle{harvard-ul}
 \bibliography{refs}
