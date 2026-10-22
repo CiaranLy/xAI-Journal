@@ -24,36 +24,37 @@ And we close with x
 \end{abstract}
 
 \section{Introduction}
-Rough draft- When written properly I will cut to 250-300 words (this should be0.5 column)
+Rough draft- main points- will shorten and lessen overlap/repetition between abstract and intro.
+\textbf{Point1:} Saliency maps are the dominant form of explanation in medical imaging AI, yet the evidence on whether they help is contradictory.
  
-\textbf{Point:1} Saliency maps are the dominant form of explanation in medical imaging AI
+Evidence: A survey of 221 medical XAI papers found most Medical Imaging AI models use visual methods highlighting influential regions as the method to explain the model [1]. Adoption remains limited, with 63\% of surveyed physicians reporting no experience of AI-based diagnosis [1], and the literature splits, Hatherley defending post-hoc explanation [2] while Kaufman and Kirsh argue post hoc XAI methods dont match how human experts build and communicate a diagnostic case [3].
  
-Evidence: Survey of 221 medical XAI papers: most use visual methods highlighting influential regions. In practice: Grad-CAM, LRP, SHAP, input gradients. 88\% of 33 surveyed physicians agreed it matters that AI explains its diagnosis.
+Explanation: The field converged on heatmaps for practical reasons (cheap, post-hoc, model-agnostic), not because their value was settled.
  
-Link - But what is the heatmap actually being claimed to show?
+Link: Why that argument has not resolved is the more useful question.
  
-\textbf{Point2} - A heatmap supports two claims that are rarely separated: faithfulness (reflects what the model computes) and plausibility (matches where a clinician would look).
+\textbf{Point2.} The literature disagrees because explanation quality is model- and task-specific. No ranking of methods can therefore fix the field, but the evidence each paper reports can.
  
-Evidence - Ma et al.: one method at mean rank 4.7 of 13 for plausibility but 8.4 for faithfulness, rank 1 best; (\textbf{how do I explain this unintuitive ranking but still cite it right?}) they conclude plausibility does not guarantee faithfulness. Our experiment reproduces this.
+Evidence: Panboonyuen finds Grad-CAM's fidelity degrades for Vision Transformers while holding for CNNs, and calls for model-aware interpretability [4]. Ma finds rankings vary by metric and dataset, with methods strong on one dimension weak on another [5]. Hou's survey separates evaluation into dimensions serving different purposes [6].
  
-Evidence: Wagner: shown one correct and one incorrect AI diagnosis per format, 50\% of physicians trusted the false ones, heatmaps producing more false diagnoses than any other format.
+Explanation: ``Which method is best?'' has no answer that transfers. What transfers is evidence, letting each reader judge for their own model and task. That requires separating two claims: faithfulness, that the map reflects what the model computes, and plausibility, that it matches where a clinician would look.
  
-Explain - Only faithfulness proves `the model learned clinically relevant features.'' Plausibility is a statement about human expectation, which is satisfiable by a model that is right for the wrong reasons.
+Link: So the question is what evidence papers actually report.
  
-Link - So a paper claiming faithfulness owes the reader a faithfulness test.
+\textbf{Point3.} Papers claim faithfulness and show plausibility.
  
-\textbf{Point 3}- Those tests are seldom run.
+Evidence: Panboonyuen defines localisation accuracy, perturbation faithfulness and explanation consistency as equations, reports no value for any, and then concludes from ten example images [4]. McGonagle treats agreement among Grad-CAM, LRP and SHAP as corroboration [7], though methods can agree and all be insensitive to the model [8]. Ma places one method at mean rank 4.7 of 13 for plausibility but 8.4 for faithfulness, where rank 1 is best [5]. (**CHANGE wording)
+In our experiment , **insert spporting claim (Sec. V).
+Shown one correct and one incorrect diagnosis per format, 50\% of physicians trusted the false ones, with heatmaps producing more false diagnoses than any other format [1].
  
-Evidence --1.Panboonyuen defines localisation accuracy, perturbation faithfulness and explanation consistency as equations, reports no value for any, and concludes from ten example images. 2.McGonagle treats agreement among Grad-CAM, LRP and SHAP as corroboration, though methods can agree and all be insensitive to the model.
+Explanation: A heatmap can highlight the tumour even when the tumour is not what the model used to decide. Only the tests these papers leave out would show the difference.
  
-Explanation -This is a pattern about what gets reported, not about what authors believe. We are not claiming post-hoc explanation is worthless, or that self-explainable models are the only route - the objection is to gathering evidence for one claim and asserting the other.
- 
-Link -if the problem is reporting, the solution is a reporting standard!
+Link: The remedy is not a better method but a reporting minimum.
  
 Contributions
  
 Contributions (three): (1) a framework separating faithfulness, 
-plausibility and simulatability; (2) an audit of recent papers; 
+plausibility and simulatability;**is this one? (2) an audit of recent papers; 
 (3) a minimum reporting checklist.
  
 References used (or that will be used) here
