@@ -81,8 +81,22 @@ An explanation is \emph{faithful} if it reflects the reasoning the model used, a
 \subsection{Known Failures}
 Under the randomisation test, Guided Backpropagation and Guided Grad-CAM maps barely changed, while Grad-CAM passed~\cite{adebayo2018sanity}. On chest radiographs, all eight methods tested by \citet{arun2021trustworthiness} failed at least one trustworthiness criterion, and all seven tested by \citet{saporta2022benchmarking} localised pathologies worse than radiologists. \citet{degrave2021shortcuts} showed why this matters clinically: COVID-19 classifiers relied on shortcuts such as text markers rather than lung pathology.
 \section{Audit Methodology}
+\label{sec:audit-framework}
+We examine whether four selected papers support their explanation claims. Following \citet{jacovi2020faithfulness} and \citet{hou2024sxai}, we separate faithfulness (whether a map reflects what the model uses) from plausibility (agreement with anatomy or expert judgement). We record user ratings, diagnosis decisions and simulatability separately.
+
+For each paper, we compare the claim, test and reported outcome, distinguishing visual examples, proposed measures, reported tests and unclear scores. Missing evidence does not mean a method fails. Our review focuses on the evidence reported in the papers. We selected these cases for their different forms of evidence, not to estimate reporting rates across the field.
 
 \section{Audit Results}
+\label{sec:audit-results}
+\textbf{Proposed measures.} \citet{panboonyuen2026seeing} defines localisation, perturbation faithfulness and consistency measures in Section II-C. However, Table I reports classification performance, while the explanation analysis discusses example heatmaps. We found no numerical outcomes for the three explanation measures. The examples suggest differences worth testing, but do not establish which architecture produces more faithful maps.
+
+\textbf{Combined explanations.} \citet{mcgonagle2026combined} presents Grad-CAM, LRP and SHAP together for brain tumour detection. Sections 4.1 and 4.2 show example maps, masks and percentages of positive and negative SHAP values. These describe the explanations, but do not independently validate them. We found no randomisation test, controlled deletion test, aggregate mask-overlap score or user evaluation. Agreement between maps therefore does not establish that they explain what the model used.
+
+\textbf{Reported fidelity.} \citet{wen2025transparent} reports fidelity scores for Grad-CAM, IG and SHAP across five medical image datasets. Section VI-C describes fidelity as a comparison of original and perturbed prediction confidence, with results in Figure 16. The paper does not make clear how the map selects the perturbation or specify the attack and its strength. The score may describe classifier robustness rather than explanation faithfulness.
+
+\textbf{User evaluation.} \citet{wagner2026usercentric} compares eight formats and no explanation with 33 medical participants, including medical students. Bounding box plus report received the highest mean ratings across the four assessed areas; heatmaps scored below no explanation on understandability. These findings concern user responses, not model faithfulness or simulatability. One correct and one incorrect diagnosis per format also limit generalisation.
+
+Across these cases, visual agreement, attribution values and user preference answer different questions. None alone establishes whether a map reflects the model. Our experiment in Section~\ref{sec:experiment} examines this distinction using several checks on the same maps.
 
 \section{Experiment}
 \label{sec:experiment}
