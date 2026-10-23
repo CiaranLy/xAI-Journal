@@ -17,7 +17,7 @@ In Week Three, we came together to choose to a topic.We each read out the differ
 Week Four -
 *week four is issue 3*
 In Week Four, we began looking at different papers for our research topic. We each chose two papers to read from a list of papers, and then we discussed them.
-Rosie - Looked into XAI in medical imaging and put together the initial list of papers for us to choose from.
+Rosie - "Ranking XAI Methods for Head and Neck Cancer Outcome Prediction" "and Architecture-aware Robustness Evaluation of Explainable Deep Learning for Breast Cancer Diagnosis, by Balenthira Thanusanth"
 Cian - "Seeing Isn't Always Believing: Analysis of Grad-CAM Faithfulness and Localization Reliability in Lung Cancer CT Classification" and "A User-Centric Analysis of Explainability in AI-Based Medical Image Diagnosis".
 Ciaran - "Explainable AI: A Combined XAI Framework for Explaining Brain Tumour Detection Models" and "Self-eXplainable AI for Medical Image Analysis: A Survey and New Outlooks".
 Aoibheann - “Towards a Transparent and Interpretable AI Model for Medical Image Classifications” and "CX-ToM: Counterfactual Explanations with Theory-of-Mind for Enhancing Human Trust in Image Recognition Models".
