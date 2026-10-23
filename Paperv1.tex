@@ -1,9 +1,8 @@
 \documentclass[conference]{IEEEtran}
 
-% Harvard (UL Cite it Right) referencing: see harvard-ul.bst and refs.bib
-\usepackage[round]{natbib}
-\setcitestyle{aysep={}}
-\usepackage{hyperref}
+% IEEE numbered referencing: IEEEtranN.bst (natbib-compatible) and refs.bib
+\usepackage[numbers,square,sort&compress]{natbib}
+\usepackage[hidelinks]{hyperref}
 \renewcommand{\cite}{\citep}
 
 \usepackage{graphicx}
@@ -83,7 +82,7 @@ An explanation is \emph{faithful} if it reflects the reasoning the model used, a
 Under the randomisation test, Guided Backpropagation and Guided Grad-CAM maps barely changed, while Grad-CAM passed~\cite{adebayo2018sanity}. On chest radiographs, all eight methods tested by \citet{arun2021trustworthiness} failed at least one trustworthiness criterion, and all seven tested by \citet{saporta2022benchmarking} localised pathologies worse than radiologists. \citet{degrave2021shortcuts} showed why this matters clinically: COVID-19 classifiers relied on shortcuts such as text markers rather than lung pathology.
 \section{Audit Methodology}
 \label{sec:audit-framework}
-We draw on \citet{hou2024sxai}'s distinction between faithfulness and plausibility. For faithfulness, we check model-weight randomisation (R)~\cite{adebayo2018sanity} and attribution-guided perturbation (F)~\cite{petsiuk2018rise}. For plausibility, we check quantitative agreement with lesion masks (L). We also check whether users predict model outputs (S)~\cite{akula2022cxtom}, and separately record user ratings or diagnosis decisions (U).
+Following \citet{jacovi2020faithfulness}, we separate faithfulness from plausibility, which \citet{hou2024sxai} list as separate requirements for medical explanations. For faithfulness, we check model-weight randomisation (R)~\cite{adebayo2018sanity} and attribution-guided perturbation (F)~\cite{petsiuk2018rise}. For plausibility, we check quantitative agreement with lesion masks (L). We also check whether users predict model outputs (S)~\cite{akula2022cxtom}, and separately record user ratings or diagnosis decisions (U).
 
 We apply these criteria to five papers selected for contrasting evidence. Table~\ref{tab:audit} records reporting status for each criterion. Reported results do not automatically mean a test passes; missing evidence does not mean it fails. This sample does not estimate reporting rates across the field.
 
@@ -192,7 +191,7 @@ Claude (Anthropic) was used to assist in implementing and running the experiment
 
 \clearpage
 \renewcommand{\bibfont}{\footnotesize}
-\bibliographystyle{harvard-ul}
+\bibliographystyle{IEEEtranN}
 \bibliography{refs}
 
 \end{document}
