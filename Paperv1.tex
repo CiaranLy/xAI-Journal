@@ -80,7 +80,7 @@ An explanation is \emph{faithful} if it reflects the reasoning the model used, a
  
 \subsection{Known Failures}
 Under the randomisation test, Guided Backpropagation and Guided Grad-CAM maps barely changed, while Grad-CAM passed~\cite{adebayo2018sanity}. On chest radiographs, all eight methods tested by \citet{arun2021trustworthiness} failed at least one trustworthiness criterion, and all seven tested by \citet{saporta2022benchmarking} localised pathologies worse than radiologists. \citet{degrave2021shortcuts} showed why this matters clinically: COVID-19 classifiers relied on shortcuts such as text markers rather than lung pathology.
-\section{Audit Framework}
+\section{Audit Methodology}
 
 \section{Audit Results}
 
@@ -193,9 +193,15 @@ Fig.~\ref{fig:examples} shows these effects on one slice.
 
 \textbf{Limitations.} The experiment uses one dataset, one architecture and one training run, and the 169 explained slices come from 17 patients. Deletion uses black replacement; blurring, inpainting or retraining~\cite{hooker2019roar} could change the size of the effects. Batch-norm statistics are reset during randomisation, so randomised networks differ in activation scale as well as weights, and IG is evaluated with a single black baseline, which partly explains its dependence on input brightness.
 
+\section{Experimental Results}
 \section{Recommendations}
 
 \section{Conclusion and Limitations}
+Provisional Placeholder for this section
+\label{sec:conclusion}
+Saliency maps in medical imaging are usually supported by agreement with the lesion, yet only one of the six audited papers reports a working faithfulness test. Our experiment shows why this matters: the best-localising method kept the most similarity with a random network, and how each test was run changed its verdict. Plausibility and faithfulness are separate claims that each need evidence on the model being explained, and the checklist in Sec.~\ref{sec:discussion} sets out the minimum a paper should report.
+
+\textbf{Limitations.} The six audited papers were chosen by hand rather than by systematic search and scored by the authors, so it shows a pattern rather than measuring how common it is. The experiment uses one dataset, one architecture and one training run, and the 169 explained slices come from 17 patients. Deletion uses black replacement; blurring, inpainting or retraining~\cite{hooker2019roar} could change the size of the effects. Randomisation resets batch-norm statistics, so randomised networks differ in activation scale as well as weights, and IG uses a single black baseline, which partly explains its dependence on input brightness. Simulatability was defined but not measured, as that requires a user study.
 
 \section*{Acknowledgment}
 Claude (Anthropic) was used to assist in implementing and running the experiment in Section~\ref{sec:experiment}. The experiment was designed and conducted by the authors, who checked all reported results.
