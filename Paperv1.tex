@@ -149,20 +149,28 @@ Tumour & -- & -- & -- & -- & \multicolumn{2}{c}{0.81} \\
 
 \section{Discussion and Recommendations}
 \label{sec:discussion}
-\textbf{Plausibility does not imply faithfulness.} The best-localising method failed the randomisation test, and Guided Backpropagation localised reasonably while ignoring the learned output layer. Localisation alone, the evidence most papers report, would have picked IG as the most trustworthy method, consistent with \citet{ma2026ranking}, who found that method rankings change with the evaluation metric.
+\textbf{Plausibility does not imply faithfulness.} The best-localising method, IG, failed the randomisation test, and Guided Backpropagation localised reasonably while ignoring the learned output layer. Localisation and example maps, the evidence most audited papers offer, would have picked IG as the most trustworthy method.
 
-\textbf{No single test is enough.} Guided Backpropagation and IG passed the patch deletion test while failing randomisation, and only randomisation exposed IG's dependence on input intensity. \citet{ma2026ranking}, who used perturbation metrics alone, likewise ranked IG among the most faithful methods on a different model and task.
+\textbf{No single test is enough.} Guided Backpropagation and IG passed patch deletion while failing randomisation, and only randomisation exposed IG's dependence on input intensity. \citet{ma2026ranking}, the only audited paper to report faithfulness, used perturbation metrics alone and likewise ranked IG among the most faithful methods.
 
-\textbf{How a test is run decides its outcome.} Including the image background inflated IG's similarity from 0.54 to 0.82, and pixel-level deletion made every method indistinguishable from random. A reported faithfulness score means little without its similarity measure, region and replacement scheme.
+\textbf{How a test is run decides its outcome.} Including the image background raised IG's similarity from 0.54 to 0.82, and pixel-level deletion made every method indistinguishable from random. A faithfulness score therefore means little without its similarity measure, region and replacement scheme, the details missing from the fidelity score of \citet{wen2025transparent}.
 
-% Recommendations (minimum reporting checklist) go here.
+\textbf{Recommendations.} A paper presenting saliency maps as explanations should report, for the model it explains:
+\begin{enumerate}
+\item a randomisation test over the region of interest;
+\item a deletion test on contiguous regions, with the replacement stated and a random-region control;
+\item lesion-mask localisation with model-free baselines;
+\item aggregate scores over a stated test set, not example maps;
+\item in user studies, whether users detect incorrect model outputs, not only which format they prefer.
+\end{enumerate}
 
 \section{Conclusion and Limitations}
-Provisional Placeholder for this section
 \label{sec:conclusion}
-Saliency maps in medical imaging are usually supported by agreement with the lesion, yet only one of the five audited papers reports a working faithfulness test. Our experiment shows why this matters: the best-localising method kept the most similarity with a random network, and how each test was run changed its verdict. Plausibility and faithfulness are separate claims that each need evidence on the model being explained, and the checklist in Sec.~\ref{sec:discussion} sets out the minimum a paper should report.
+Saliency maps in medical imaging are presented as evidence that a model reasons correctly, but the evidence offered is mostly plausibility: example maps that look right, agreement between methods and formats users prefer. Only one of the five audited papers reports a faithfulness test, and it relies on perturbation alone. Our experiment shows why this matters: IG localised the tumour best yet kept a correlation of 0.54 with a fully random network. Plausibility and faithfulness are separate claims, and each needs its own evidence on the model being explained.
 
-\textbf{Limitations.} The five audited papers were chosen by hand rather than by systematic search and scored by the authors, so it shows a pattern rather than measuring how common it is. The experiment uses one dataset, one architecture and one training run, and the 169 explained slices come from 17 patients. Deletion uses black replacement; blurring, inpainting or retraining~\cite{hooker2019roar} could change the size of the effects. Randomisation resets batch-norm statistics, so randomised networks differ in activation scale as well as weights, and IG uses a single black baseline, which partly explains its dependence on input brightness. Simulatability was defined but not measured, as that requires a user study.
+\textbf{Limitations.} The five audited papers were chosen by hand, not by systematic search, and assessed by the authors, so the audit shows a pattern rather than how common it is. The experiment uses one dataset, architecture and training run, with 169 slices from 17 patients. Black replacement in deletion~\cite{hooker2019roar}, batch-norm resetting in randomisation and IG's single black baseline may each change the size of the effects. Simulatability was not measured, and measuring faithfulness when the model's reasoning cannot be observed remains an open problem.
+
+Future work should repeat the experiment across architectures, datasets and replacement schemes, and test with clinicians whether faithful maps help them catch model errors. Until the checks in Section~\ref{sec:discussion} are standard, a saliency map in a medical imaging paper should be read as a plausible illustration, not as evidence of how the model decides.
 
 \section*{Acknowledgment}
 Claude (Anthropic) was used to assist in implementing and running the experiment in Section~\ref{sec:experiment}. The experiment was designed and conducted by the authors, who checked all reported results.
