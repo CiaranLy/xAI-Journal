@@ -1,9 +1,8 @@
 \documentclass[conference]{IEEEtran}
 
-% Harvard (UL Cite it Right) referencing: see harvard-ul.bst and refs.bib
-\usepackage[round]{natbib}
-\setcitestyle{aysep={}}
-\usepackage{hyperref}
+% IEEE numbered referencing: IEEEtranN.bst (natbib-compatible) and refs.bib
+\usepackage[numbers,square,sort&compress]{natbib}
+\usepackage[hidelinks]{hyperref}
 \renewcommand{\cite}{\citep}
 
 \usepackage{graphicx}
@@ -192,7 +191,7 @@ Claude (Anthropic) was used to assist in implementing and running the experiment
 
 \clearpage
 \renewcommand{\bibfont}{\footnotesize}
-\bibliographystyle{harvard-ul}
+\bibliographystyle{IEEEtranN}
 \bibliography{refs}
 
 \end{document}
