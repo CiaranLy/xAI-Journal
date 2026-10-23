@@ -45,4 +45,4 @@ pdflatex Paperv1
 
 Setup, dataset download and run commands are in [`experiment/README.md`](experiment/README.md). The results used in the paper are already saved in `experiment/results/`, so you don't need to rerun anything to build the paper.
 
-ReadMe was amde by Claude (Antrophic)
+ReadMe was made by Claude (Antrophic)
