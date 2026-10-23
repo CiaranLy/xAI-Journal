@@ -109,20 +109,30 @@ This section shows what the missing tests reveal on a typical medical imaging se
 \textbf{Explanations.} We compare Gradient~\cite{simonyan2014saliency}, Guided Backpropagation~\cite{springenberg2015guided}, Integrated Gradients (IG; 32 steps, black baseline)~\cite{sundararajan2017ig} and Grad-CAM on the last convolutional block~\cite{selvaraju2017gradcam}. All four explain the tumour logit on the 169 test tumour slices the model classifies correctly.
 
 \subsection{Randomisation Test}
-Following \citet{adebayo2018sanity}, we re-initialise the network one block at a time, from the output layer down to the first convolution, with three random seeds. After each step we compare the new maps with the trained model's maps using Spearman rank correlation of absolute saliency over brain pixels. A faithful method should lose its similarity as the learned weights are destroyed. Table~\ref{tab:randomisation} gives the results.
+Following \citet{adebayo2018sanity}, we re-initialise the network one block at a time, from the output layer down to the first convolution, with three random seeds. After each step we compare the new maps with the trained model's maps using Spearman rank correlation of absolute saliency over brain pixels. A faithful method should lose its similarity as the learned weights are destroyed. Table~\ref{tab:results} gives the results.
 
 \begin{table}[t]
 \centering
-\caption{Spearman correlation (brain pixels) between saliency maps of the trained model and of models randomised down to each layer. Mean over 169 slices and 3 seeds.}
-\label{tab:randomisation}
-\begin{tabular}{lcccc}
+\caption{Experiment results, mean over 169 test tumour slices. Randomised: correlation with the trained model's maps (lower is better). Localisation: pointing game and map mass in tumour. Deletion: drop in tumour probability after deleting 1\% of the image.}
+\label{tab:results}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lcccccc}
 \hline
-Randomised down to & Gradient & Guided BP & IG & Grad-CAM \\
+ & \multicolumn{2}{c}{Randomised} & \multicolumn{2}{c}{Localisation} & \multicolumn{2}{c}{Deletion} \\
+\cline{2-3}\cline{4-5}\cline{6-7}
+Map & Output & Full & Point. & Mass & Pixel & Patch \\
 \hline
-Output layer & 0.48 & \textbf{0.99} & 0.75 & 0.29 \\
-Block 4 & 0.16 & 0.76 & 0.61 & 0.12 \\
-Block 2 & 0.09 & 0.39 & 0.56 & $-0.01$ \\
-Whole network & 0.01 & 0.12 & \textbf{0.54} & $-0.13$ \\
+Gradient  & 0.48 & 0.01 & 0.73 & 0.13 & 0.83 & 0.45 \\
+Guided BP & \textbf{0.99} & 0.12 & 0.47 & 0.23 & 0.84 & 0.41 \\
+IG        & 0.75 & \textbf{0.54} & \textbf{0.91} & \textbf{0.24} & 0.86 & 0.49 \\
+Grad-CAM  & 0.29 & $-0.13$ & 0.56 & 0.13 & 0.38 & 0.37 \\
+\hline
+Random model    & -- & -- & $\leq$0.01 & 0.02--0.07 & -- & -- \\
+Edge detector   & -- & -- & 0.01 & 0.03 & -- & -- \\
+Input intensity & -- & -- & 0.00 & 0.07 & -- & -- \\
+Random region   & -- & -- & -- & -- & \textbf{0.83} & \textbf{0.04} \\
+Tumour (2.8\%)  & -- & -- & -- & -- & \multicolumn{2}{c}{0.81} \\
 \hline
 \end{tabular}
 \end{table}
@@ -134,60 +144,14 @@ Over the whole image, IG's similarity with the fully random network is 0.82 rath
 \subsection{Localisation}
 We measure plausibility as it is usually reported, by agreement with the annotated tumour: the pointing game~\cite{zhang2018pointing} (whether the map's peak falls inside the mask) and the share of the map's mass inside the mask. The tumour covers on average 2.8\% of a slice, so a uniform map would place 2.8\% of its mass there. As controls we score the fully randomised model and two maps that use no model at all: Sobel edges of the FLAIR channel and raw input intensity.
 
-\begin{table}[t]
-\centering
-\caption{Localisation on the annotated tumour (mean of 169 slices). The tumour covers 2.8\% of a slice on average.}
-\label{tab:localisation}
-\begin{tabular}{lcc}
-\hline
-Map & Pointing game & Mass in tumour \\
-\hline
-IG, trained & \textbf{0.91} & \textbf{0.24} \\
-Gradient, trained & 0.73 & 0.13 \\
-Grad-CAM, trained & 0.56 & 0.13 \\
-Guided BP, trained & 0.47 & 0.23 \\
-Any method, fully randomised & $\leq 0.01$ & 0.02--0.07 \\
-No model (edges / intensity) & 0.01 / 0.00 & 0.03 / 0.07 \\
-\hline
-\end{tabular}
-\end{table}
-
-Table~\ref{tab:localisation} shows that IG localises the tumour best, with its peak inside the mask on 91\% of slices. Yet IG is also the method that keeps the most similarity with a fully random network in Table~\ref{tab:randomisation}.
+Table~\ref{tab:results} shows that IG localises the tumour best, with its peak inside the mask on 91\% of slices. Yet IG is also the method that keeps the most similarity with a fully random network in the same table.
 
 \subsection{Deletion Test}
 Following \citet{petsiuk2018rise}, we black out the top 1--20\% of the image ranked by saliency and measure the drop in the model's tumour probability, whose baseline is 0.967. We rank either single pixels or $16\times16$ patches (by mean saliency). As controls we delete the same amount of randomly chosen brain pixels or patches, and the annotated tumour itself.
 
-\begin{table}[t]
-\centering
-\caption{Mean drop in tumour probability (baseline 0.967) after deleting 1\% of the image, ranked by single pixels or by $16\times16$ patches.}
-\label{tab:deletion}
-\begin{tabular}{lcc}
-\hline
-Deleted & Pixels & Patches \\
-\hline
-Gradient, top 1\% & 0.83 & 0.45 \\
-Guided BP, top 1\% & 0.84 & 0.41 \\
-IG, top 1\% & 0.86 & 0.49 \\
-Grad-CAM, top 1\% & 0.38 & 0.37 \\
-Random brain region, 1\% & \textbf{0.83} & \textbf{0.04} \\
-\hline
-Annotated tumour (2.8\%) & \multicolumn{2}{c}{0.81} \\
-\hline
-\end{tabular}
-\end{table}
+At pixel level the test cannot tell a saliency method from chance (Table~\ref{tab:results}): deleting 1\% of random brain pixels lowers the tumour probability by 0.83, as much as deleting the pixels Gradient, Guided Backpropagation or IG rank highest, and slightly more than deleting the whole tumour. Scattered black pixels push the image out of the distribution the model was trained on and break its prediction whatever selects them~\cite{hooker2019roar}. Grad-CAM, whose coarse maps rank contiguous regions, behaves like the patch version even at pixel level. Deleting contiguous patches removes this effect: random patches lower the probability by only 0.04, while every method's top patches lower it by 0.37--0.49. Under this version of the test, all four methods highlight regions the model relies on.
 
-At pixel level the test cannot tell a saliency method from chance (Table~\ref{tab:deletion}): deleting 1\% of random brain pixels lowers the tumour probability by 0.83, as much as deleting the pixels Gradient, Guided Backpropagation or IG rank highest, and slightly more than deleting the whole tumour. Scattered black pixels push the image out of the distribution the model was trained on and break its prediction whatever selects them~\cite{hooker2019roar}. Grad-CAM, whose coarse maps rank contiguous regions, behaves like the patch version even at pixel level. Deleting contiguous patches removes this effect: random patches lower the probability by only 0.04, while every method's top patches lower it by 0.37--0.49. Under this version of the test, all four methods highlight regions the model relies on.
-
-\subsection{Discussion}
-Three points follow for how saliency maps should be evaluated.
-
-\textbf{Plausibility does not imply faithfulness.} The best-localising method failed the randomisation test, and Guided Backpropagation localised reasonably while ignoring the learned output layer. Localisation alone, the evidence most papers report, would have picked IG as the most trustworthy method. Ranking methods by agreement with the annotation does not predict their ranking by model dependence, consistent with \citet{ma2026ranking}, who found that method rankings change with the evaluation metric.
-
-\textbf{No single test is enough.} Guided Backpropagation and IG passed the patch deletion test while failing randomisation, and only randomisation exposed IG's dependence on input intensity. Each test answers a different question.
-
-\textbf{How a test is run decides its outcome.} Including the image background inflated IG's similarity from 0.54 to 0.82, making it look less model-dependent than it is, and pixel-level deletion made every method indistinguishable from random. A reported faithfulness score therefore means little without its similarity measure, region and replacement scheme.
-
-Fig.~\ref{fig:examples} shows these effects on one slice.
+Fig.~\ref{fig:examples} shows the randomisation results on one slice.
 
 \begin{figure}[t]
 \centering
@@ -196,15 +160,25 @@ Fig.~\ref{fig:examples} shows these effects on one slice.
 \label{fig:examples}
 \end{figure}
 
-\section{Experimental Results}
 \section{Recommendations}
+\label{sec:recommendations}
+The experiment shows why the evidence missing from the audited papers matters. First, plausibility does not imply faithfulness: IG localised the tumour best yet failed randomisation, so localisation alone, the evidence most papers report, would rank the methods wrongly, consistent with \citet{ma2026ranking}. Second, no single test is enough: Guided Backpropagation and IG passed patch deletion while failing randomisation. Third, how a test is run decides its outcome: including the background raised IG's similarity to a random network from 0.54 to 0.82, and pixel-level deletion made every method indistinguishable from random. A paper presenting saliency maps as explanations should therefore report, for the model it explains:
+\begin{enumerate}
+\item a randomisation test over the region of interest, not the whole image;
+\item a deletion test on contiguous regions, with the replacement value stated and a random-region control;
+\item localisation against lesion masks, alongside no-model baselines such as edge maps;
+\item aggregate scores over a stated test set, not selected example maps;
+\item user studies that include incorrect model outputs and measure whether users detect them~\cite{wagner2026usercentric}.
+\end{enumerate}
+Items 1--4 need only the trained model and its test data.
 
 \section{Conclusion and Limitations}
-Provisional Placeholder for this section
 \label{sec:conclusion}
-Saliency maps in medical imaging are usually supported by agreement with the lesion, yet only one of the six audited papers reports a working faithfulness test. Our experiment shows why this matters: the best-localising method kept the most similarity with a random network, and how each test was run changed its verdict. Plausibility and faithfulness are separate claims that each need evidence on the model being explained, and the checklist in Sec.~\ref{sec:discussion} sets out the minimum a paper should report.
+Saliency maps in medical imaging are presented as evidence that a model reasons correctly, but the evidence offered is mostly plausibility: example maps that look right and formats users prefer. None of the four audited papers reports a result showing that its maps reflect the model, and our experiment shows that such results can reverse which method looks trustworthy.
 
-\textbf{Limitations.} The six audited papers were chosen by hand rather than by systematic search and scored by the authors, so it shows a pattern rather than measuring how common it is. The experiment uses one dataset, one architecture and one training run, and the 169 explained slices come from 17 patients. Deletion uses black replacement; blurring, inpainting or retraining~\cite{hooker2019roar} could change the size of the effects. Randomisation resets batch-norm statistics, so randomised networks differ in activation scale as well as weights, and IG uses a single black baseline, which partly explains its dependence on input brightness. Simulatability was defined but not measured, as that requires a user study.
+\textbf{Limitations.} The audited papers were chosen by hand and assessed by the authors, so the audit shows a pattern, not how common it is. The experiment uses one dataset, architecture and training run, with 169 slices from 17 patients. Black replacement in deletion~\cite{hooker2019roar}, batch-norm resetting in randomisation and IG's single black baseline may each affect the size of the effects. Simulatability was not measured, and how to measure faithfulness when the model's reasoning cannot be observed remains open.
+
+Future work should repeat the experiment across architectures, datasets and replacement schemes, and test with clinicians whether faithful maps help them catch model errors. Until the checks in Section~\ref{sec:recommendations} are standard, a saliency map in a medical imaging paper should be read as a plausible illustration, not as evidence of how the model decides.
 
 \section*{Acknowledgment}
 Claude (Anthropic) was used to assist in implementing and running the experiment in Section~\ref{sec:experiment}. The experiment was designed and conducted by the authors, who checked all reported results.
