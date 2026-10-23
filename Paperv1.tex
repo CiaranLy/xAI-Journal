@@ -19,16 +19,19 @@ Are Evaluated in Medical Imaging}
 \maketitle
 
 \begin{abstract}
-Saliency maps are the default explanation method in medical imaging AI 
-A plausible xai method is needed because x, and a faithful method is needed because y 
-These are both important because z 
-We aregue that the evidence for them being faithful is rarely produced 
-Plausability and fauthfulness require two diffent tests. 
-We audit recent medical-imaging saliency papers against criteria 
-We have put together that has been drawn from published evaluation frameworks- x y and z 
-And we find x 
-We then run a sanity-check experiment 
-And we close with x
+This paper examines whether medical imaging studies test their saliency
+maps for faithfulness, meaning that a map reflects what the model computes,
+or only for plausibility, meaning that it looks convincing to a clinician.
+An audit of five recent papers finds that only one reports a faithfulness
+test, and none randomises the model or measures whether users can predict
+it. We then apply the missing tests to four saliency methods explaining a
+brain tumour classifier on magnetic resonance imaging (MRI). Integrated
+Gradients located the tumour on 91\% of slices, yet its maps stayed
+correlated with those of a fully randomised network (0.54), and deleting
+single pixels could not separate three of the four methods from random
+deletion. Localisation alone therefore misjudges which maps reflect the
+model, and the way a test is run can change its verdict. We conclude with a
+minimum reporting checklist.
 \end{abstract}
 
 \section{Introduction}
