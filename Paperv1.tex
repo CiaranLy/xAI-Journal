@@ -87,7 +87,7 @@ We examine whether four selected papers support their explanation claims, keepin
 
 \section{Audit Results}
 \label{sec:audit-results}
-\textbf{Proposed measures.} \citet{panboonyuen2026seeing} defines localisation, perturbation faithfulness and consistency measures in Section II-C. However, Table I reports classification performance, while the explanation analysis discusses example heatmaps. We found no numerical outcomes for the three explanation measures. The examples suggest differences worth testing, but do not establish which architecture produces more faithful maps.
+\textbf{Proposed measures.} \citet{panboonyuen2026seeing} defines localisation, perturbation faithfulness and consistency measures in Section II-C. However, its Table I reports classification performance, while the explanation analysis discusses example heatmaps. We found no numerical outcomes for the three explanation measures. The examples suggest differences worth testing, but do not establish which architecture produces more faithful maps.
 
 \textbf{Combined explanations.} \citet{mcgonagle2026combined} presents Grad-CAM, LRP and SHAP together for brain tumour detection. Sections 4.1 and 4.2 show example maps, masks and percentages of positive and negative SHAP values. These describe the explanations, but do not independently validate them. We found no randomisation test, controlled deletion test, aggregate mask-overlap score or user evaluation. Agreement between maps therefore does not establish that they explain what the model used.
 
@@ -167,6 +167,8 @@ Saliency maps in medical imaging are usually supported by agreement with the les
 \section*{Acknowledgment}
 Claude (Anthropic) was used to assist in implementing and running the experiment in Section~\ref{sec:experiment}. The experiment was designed and conducted by the authors, who checked all reported results.
 
+\clearpage
+\renewcommand{\bibfont}{\footnotesize}
 \bibliographystyle{harvard-ul}
 \bibliography{refs}
 
