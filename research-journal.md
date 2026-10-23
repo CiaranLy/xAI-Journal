@@ -35,8 +35,10 @@ We created a slide deck and a script for the slides.
 
 Week Six -
 *week six is issue 5*
-In week six, we presented our slides on the Monday. We presented them in front of the lecturer and the TA. After we were finished presenting, we had a meeting to discuss the paper. We discussed the headings, what information we felt would be needed in the paper and who would do what section. Ciaran also began doing an experiment for our paper.
+In week six, we presented our slides on the Monday. We had a meeting to discuss the paper. After trying to pick from a pool of similar thesises, Ciaran proposed a project plan to which we all agreed. It built directly on the research we had done so far and we had collected enough evidence to explore the thesis. We discussed the headings, what information we felt would be needed in the paper and who would do what section. Ciaran also began doing an experiment for our paper. 
 For the experiment, Ciaran used brain MRI images to test four different explanation methods. He checked whether the heatmaps matched the tumour and what happened when the model was changed or parts of the image were removed. The results showed why we could not judge an explanation just by how the heatmap looked. This gave us an example to use alongside the papers we had read. Ciaran added the code, results and figures to the repo and posted an update in [Issue #6](https://github.com/CiaranLy/xAI-Journal/issues/6).
 
 Week Seven - 
-In week seven, we finished off the paper. Everyone combined their pieces and then as a group, we discussed what needed to be cut down and changed.
+In week seven, we finished off the paper. Many drafts of each section were written, and we reviewed the basic structure of what everyone wanted to put in each section. Everyone combined their pieces and then as a group, we discussed what needed to be cut down and changed- because we accidentally miscounted the split of how much space could go to each section in the paper. Everyone proofread they're own and at least another's section in the final drafts. 
+
+ 
