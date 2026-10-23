@@ -83,21 +83,36 @@ An explanation is \emph{faithful} if it reflects the reasoning the model used, a
 Under the randomisation test, Guided Backpropagation and Guided Grad-CAM maps barely changed, while Grad-CAM passed~\cite{adebayo2018sanity}. On chest radiographs, all eight methods tested by \citet{arun2021trustworthiness} failed at least one trustworthiness criterion, and all seven tested by \citet{saporta2022benchmarking} localised pathologies worse than radiologists. \citet{degrave2021shortcuts} showed why this matters clinically: COVID-19 classifiers relied on shortcuts such as text markers rather than lung pathology.
 \section{Audit Methodology}
 \label{sec:audit-framework}
-We examine whether five selected papers support their explanation claims, keeping faithfulness, plausibility and simulatability (Section~\ref{sec:properties}) separate from user ratings and diagnosis decisions. For each paper, we compare the claim, test and reported outcome, distinguishing visual examples, proposed measures, reported tests and unclear scores. Missing evidence does not mean a method fails. We selected these cases for their different forms of evidence, not to estimate reporting rates across the field.
+We draw on \citet{hou2024sxai}'s distinction between faithfulness and plausibility. For faithfulness, we check model-weight randomisation (R)~\cite{adebayo2018sanity} and attribution-guided perturbation (F)~\cite{petsiuk2018rise}. For plausibility, we check quantitative agreement with lesion masks (L). We also check whether users predict model outputs (S)~\cite{akula2022cxtom}, and separately record user ratings or diagnosis decisions (U).
+
+We apply these criteria to five papers selected for contrasting evidence. Table~\ref{tab:audit} records reporting status for each criterion. Reported results do not automatically mean a test passes; missing evidence does not mean it fails. This sample does not estimate reporting rates across the field.
 
 \section{Audit Results}
 \label{sec:audit-results}
-\textbf{Proposed measures.} \citet{panboonyuen2026seeing} defines localisation, perturbation faithfulness and consistency measures in Section II-C. However, its Table I reports classification performance, while the explanation analysis discusses example heatmaps. We found no numerical outcomes for the three explanation measures. The examples suggest differences worth testing, but do not establish which architecture produces more faithful maps.
+\begin{table}[!ht]
+\centering
+\caption{Reporting against the five audit criteria. Yes: results reported; Def.: measure defined without results; Unclear: score reported but its link to the criterion is unclear; NR: results not reported in the reviewed main text.}
+\label{tab:audit}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lccccc}
+\hline
+Paper & R & F & L & S & U \\
+\hline
+Panboonyuen & NR & Def. & Def. & NR & NR \\
+McGonagle et al. & NR & NR & NR & NR & NR \\
+Wen et al. & NR & Unclear & NR & NR & NR \\
+Wagner and Schlippe & NR & NR & NR & NR & Yes \\
+Ma et al. & NR & Yes & Yes & NR & NR \\
+\hline
+\end{tabular}
+\end{table}
 
-\textbf{Combined explanations.} \citet{mcgonagle2026combined} presents Grad-CAM, LRP and SHAP together for brain tumour detection. Sections 4.1 and 4.2 show example maps, masks and percentages of positive and negative SHAP values. These describe the explanations, but do not independently validate them. We found no randomisation test, controlled deletion test, aggregate mask-overlap score or user evaluation. Agreement between maps therefore does not establish that they explain what the model used.
+\citet{panboonyuen2026seeing} defines localisation and perturbation measures (Section II-C), but reports classification scores and example heatmaps without numerical explanation outcomes. Its consistency across seeds is not a model-weight randomisation test. \citet{mcgonagle2026combined} shows maps, masks and SHAP sign percentages (Sections 4.1 and 4.2), without outcomes for our five criteria. These examples still provide qualitative evidence.
 
-\textbf{Reported fidelity.} \citet{wen2025transparent} reports fidelity scores for Grad-CAM, IG and SHAP across five medical image datasets. Section VI-C describes fidelity as a comparison of original and perturbed prediction confidence, with results in Figure 16. The paper does not make clear how the map selects the perturbation or specify the attack and its strength. The score may describe classifier robustness rather than explanation faithfulness.
+\citet{wen2025transparent} reports fidelity scores (Section VI-C), but does not make clear how the map selects the perturbation or specify the attack and its strength. We cannot tell whether this tests explanation faithfulness or classifier robustness. \citet{wagner2026usercentric} reports ratings and diagnosis decisions from 33 medical participants (Sections 4 and 5). These concern user responses; participants do not predict model outputs.
 
-\textbf{User evaluation.} \citet{wagner2026usercentric} compares eight formats and no explanation with 33 medical participants, including medical students. Bounding box plus report received the highest mean ratings across the four assessed areas; heatmaps scored below no explanation on understandability. These findings concern user responses, not model faithfulness or simulatability. One correct and one incorrect diagnosis per format also limit generalisation.
-
-\textbf{Separate evaluation.} \citet{ma2026ranking} ranks 13 saliency methods for head and neck cancer outcome prediction from PET/CT on 24 metrics, ten for faithfulness and six for plausibility, and is the only audited paper that tests and reports both. Rankings varied widely across metrics: Vanilla Gradient ranked high on plausibility (mean rank 4.7) but low on faithfulness (8.4), while IG and DeepLIFT ranked in the top three for both. Its faithfulness metrics are all perturbation-based; none randomises the model.
-
-Across these cases, visual agreement, attribution values and user preference answer different questions. None alone establishes whether a map reflects the model. Our experiment in Section~\ref{sec:experiment} examines this distinction using several checks on the same maps.
+\citet{ma2026ranking} reports attribution-guided perturbation and lesion-agreement results (Section 2.4 and Table 1). Vanilla Gradient's mean rank is 4.7 for plausibility and 8.4 for faithfulness, showing that the rankings differ. None of the five papers reports model-weight randomisation. Our experiment in Section~\ref{sec:experiment} combines this check with localisation and deletion on the same maps.
 
 \section{Experimental Setup}
 \label{sec:experiment}
