@@ -52,14 +52,14 @@ because a map can pass one and fail the other. In our experiment, the method
 that located the tumour best depended least on the model 
 (Sec.~\ref{sec:experiment}).
 
-Only one of the five recent papers we audit reports a working faithfulness 
-test. \citet{panboonyuen2026seeing} defines faithfulness metrics but reports 
-none and concludes from ten example images. The others present maps that 
-look right as evidence that their models reason correctly, without showing 
-that the maps reflect the models at all.
+Only one of the five recent papers we audit, \citet{ma2026ranking}, reports 
+a faithfulness test, and it relies on perturbation alone. 
+\citet{panboonyuen2026seeing} defines faithfulness metrics but reports none 
+and concludes from ten example images. The others rely on example maps, a 
+fidelity score of unclear meaning, or user preference.
 
-To close this gap, we contribute (1) a framework separating faithfulness, 
-plausibility and simulatability; (2) an audit of five papers against it; 
+To close this gap, we contribute (1) five evaluation criteria separating faithfulness, 
+plausibility and simulatability; (2) an audit of five papers against them; 
 (3) an experiment showing what the missing tests reveal; and (4) a minimum 
 reporting checklist.
 
@@ -76,7 +76,7 @@ where $Z$ is the number of spatial positions $(i,j)$, so its maps are coarse and
  
 \subsection{Faithfulness, Plausibility and Simulatability}
 \label{sec:properties}
-An explanation is \emph{faithful} if it reflects the reasoning the model used, and \emph{plausible} if it convinces a human~\cite{jacovi2020faithfulness}; in medical imaging, plausibility is usually judged by overlap with lesion masks. A map can outline a tumour while the model relies on something else, so faithfulness must be tested against the model. The \emph{randomisation test}~\cite{adebayo2018sanity} randomises the model's weights: a map that barely changes cannot reflect what the model learned. The \emph{deletion test}~\cite{petsiuk2018rise} removes the most salient pixels first: for a faithful map, the class score falls faster than when random pixels are removed. \emph{Simulatability}, whether a person can predict the model's output from the explanation, is a third property, which CX-ToM~\cite{akula2022cxtom} measures as users' ability to predict the model. \citet{hou2024sxai} list faithfulness and plausibility as separate requirements for medical explanations.
+An explanation is \emph{faithful} if it reflects the reasoning the model used, and \emph{plausible} if it convinces a human~\cite{jacovi2020faithfulness}; in medical imaging, plausibility is usually judged by overlap with lesion masks. A map can outline a tumour while the model relies on something else, so faithfulness must be tested against the model. The \emph{randomisation test}~\cite{adebayo2018sanity} randomises the model's weights: a map that barely changes cannot reflect what the model learned. The \emph{deletion test}~\cite{petsiuk2018rise} removes the most salient pixels first: for a faithful map, the class score falls faster than when random pixels are removed. \emph{Simulatability}, whether a person can predict the model's output from the explanation, is a third property, which CX-ToM~\cite{akula2022cxtom} measures as users' ability to predict the model.
  
 \subsection{Known Failures}
 Under the randomisation test, Guided Backpropagation and Guided Grad-CAM maps barely changed, while Grad-CAM passed~\cite{adebayo2018sanity}. On chest radiographs, all eight methods tested by \citet{arun2021trustworthiness} failed at least one trustworthiness criterion, and all seven tested by \citet{saporta2022benchmarking} localised pathologies worse than radiologists. \citet{degrave2021shortcuts} showed why this matters clinically: COVID-19 classifiers relied on shortcuts such as text markers rather than lung pathology.
@@ -107,11 +107,11 @@ Ma et al. & NR & Yes & Yes & NR & NR \\
 \end{tabular}
 \end{table}
 
-\citet{panboonyuen2026seeing} defines localisation and perturbation measures (Section II-C), but reports classification scores and example heatmaps without numerical explanation outcomes. Its consistency across seeds is not a model-weight randomisation test. \citet{mcgonagle2026combined} shows maps, masks and SHAP sign percentages (Sections 4.1 and 4.2), without outcomes for our five criteria. These examples still provide qualitative evidence.
+\citet{panboonyuen2026seeing} defines localisation and perturbation measures (Section II-C), but reports classification scores and example heatmaps without numerical explanation outcomes. Its consistency across seeds is not a model-weight randomisation test. \citet{mcgonagle2026combined} show maps, masks and SHAP sign percentages (Sections 4.1 and 4.2), without outcomes for our five criteria. These examples still provide qualitative evidence.
 
-\citet{wen2025transparent} reports fidelity scores (Section VI-C), but does not make clear how the map selects the perturbation or specify the attack and its strength. We cannot tell whether this tests explanation faithfulness or classifier robustness. \citet{wagner2026usercentric} reports ratings and diagnosis decisions from 33 medical participants (Sections 4 and 5). These concern user responses; participants do not predict model outputs.
+\citet{wen2025transparent} report fidelity scores (Section VI-C), but does not make clear how the map selects the perturbation or specify the attack and its strength. We cannot tell whether this tests explanation faithfulness or classifier robustness. \citet{wagner2026usercentric} report ratings and diagnosis decisions from 33 medical participants (Sections 4 and 5). These concern user responses; participants do not predict model outputs.
 
-\citet{ma2026ranking} reports attribution-guided perturbation and lesion-agreement results (Section 2.4 and Table 1). Vanilla Gradient's mean rank is 4.7 for plausibility and 8.4 for faithfulness, showing that the rankings differ. None of the five papers reports model-weight randomisation. Our experiment in Section~\ref{sec:experiment} combines this check with localisation and deletion on the same maps.
+\citet{ma2026ranking} report attribution-guided perturbation and lesion-agreement results (Section 2.4 and Table 1). Vanilla Gradient's mean rank is 4.7 for plausibility and 8.4 for faithfulness, showing that the rankings differ. None of the five papers reports model-weight randomisation (R) or simulatability (S). Our experiment in Section~\ref{sec:experiment} combines this check with localisation and deletion on the same maps.
 
 \section{Experimental Setup}
 \label{sec:experiment}
@@ -169,13 +169,12 @@ Tumour & -- & -- & -- & -- & \multicolumn{2}{c}{0.81} \\
 
 \textbf{How a test is run decides its outcome.} Including the image background raised IG's similarity from 0.54 to 0.82, and pixel-level deletion made every method indistinguishable from random. A faithfulness score therefore means little without its similarity measure, region and replacement scheme, the details missing from the fidelity score of \citet{wen2025transparent}.
 
-\textbf{Recommendations.} A paper presenting saliency maps as explanations should report, for the model it explains:
+\textbf{Recommendations.} A paper presenting saliency maps as explanations should report, for the model it explains and as aggregate scores over a stated test set rather than example maps:
 \begin{enumerate}
-\item a randomisation test over the region of interest;
-\item a deletion test on contiguous regions, with the replacement stated and a random-region control;
-\item lesion-mask localisation with model-free baselines;
-\item aggregate scores over a stated test set, not example maps;
-\item in user studies, whether users detect incorrect model outputs, not only which format they prefer.
+\item a randomisation test over the region of interest (R);
+\item a deletion test on contiguous regions, with the replacement stated and a random-region control (F);
+\item lesion-mask localisation with model-free baselines (L);
+\item in user studies, whether users can predict the model's outputs and detect its errors (S), not only which format they prefer (U).
 \end{enumerate}
 
 \section{Conclusion and Limitations}
