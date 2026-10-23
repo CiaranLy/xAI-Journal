@@ -58,8 +58,8 @@ def example_maps(index=0):
     image = (d["images"][index:index + 1] * IMAGENET_STD.numpy() + IMAGENET_MEAN.numpy())[0]
     flair = np.clip(image[1], 0, 1)
     mask = test_images()[1][index]
-    columns = ["Trained", "Logits", "Layer 4", "Layer 2", "Conv 1"]
-    fig, axes = plt.subplots(len(METHODS), len(columns) + 1, figsize=(3.5, 2.75),
+    columns = ["Trained", "Logits", "Layer 4", "Conv 1"]
+    fig, axes = plt.subplots(len(METHODS), len(columns) + 1, figsize=(3.0, 2.85),
                              gridspec_kw={"wspace": 0.04, "hspace": 0.06})
     for r, method in enumerate(METHODS):
         axes[r, 0].imshow(flair, cmap="gray")
