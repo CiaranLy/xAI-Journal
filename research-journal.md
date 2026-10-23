@@ -12,8 +12,7 @@ Everyone wrote a review on the papers that we looked into for choosing the topic
 
 
 Week Three -
-In Week Three, we came together to choose to a topic.We each read out the different topics we had looked into, before having a discussion where we decided to look into: How Saliency Explanations
-Are Evaluated in Medical Imaging. The reason we decided to do this topic is because not only is it relevant to the work we were doing in the course, but it was also a topic that interested us as well
+In Week Three, we came together to choose to a topic.We each read out the different topics we had looked into,and compared 1. Was there enough depth in the topic 2. Is there enough research out there on this topic 3. What does the research say from what we've read and looked into. We landed on: How Saliency Explanations Are Evaluated in Medical Imaging. The reason we decided to do this topic is because not only is it relevant to the work we were doing in the course, but it was also a topic that interested us as well 
 
 Week Four -
 *week four is issue 3*
@@ -22,6 +21,8 @@ Rosie - Looked into XAI in medical imaging and put together the initial list of 
 Cian - "Seeing Isn't Always Believing: Analysis of Grad-CAM Faithfulness and Localization Reliability in Lung Cancer CT Classification" and "A User-Centric Analysis of Explainability in AI-Based Medical Image Diagnosis".
 Ciaran - "Explainable AI: A Combined XAI Framework for Explaining Brain Tumour Detection Models" and "Self-eXplainable AI for Medical Image Analysis: A Survey and New Outlooks".
 Aoibheann - “Towards a Transparent and Interpretable AI Model for Medical Image Classifications” and "CX-ToM: Counterfactual Explanations with Theory-of-Mind for Enhancing Human Trust in Image Recognition Models".
+
+We discussed what claims the papers made, and how good and reputible of a source they were. We then discussed what type of paper we should do - a critique, a survey, or perhaps a new experiment. We put together all the research we had and what claims each paper made and started to form our thesis. 
 
 Week Five -
 *week five is issue 4*
